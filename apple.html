@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
+  <meta name="description" content="Saboreio: tecnologia para aproximar cardápio, pedidos e operação de restaurantes.">
+  <title>sabore.io — O sabor da sua marca, com tecnologia</title>
+  <style>
+    :root {
+      color-scheme: light dark;
+      --paper: #fff;
+      --card: #fff;
+      --ink: #1d1d1f;
+      --muted: #6e6e73;
+      --secondary: #515154;
+      --accent: #e6421a;
+      --accent-text: #b83213;
+      --surface: #f5f5f7;
+      --line: #d2d2d7;
+      --manifesto-bg: #1d1d1f;
+      --manifesto-muted: #d2d2d7;
+      --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --radius-card: 24px;
+      --ease-standard: cubic-bezier(.25, .1, .25, 1);
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
+    a { color: inherit; }
+    a:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+    .skip-link { position: fixed; z-index: 20; top: 8px; left: 8px; padding: 12px 16px; border-radius: 12px; background: var(--card); color: var(--ink); font-size: 14px; font-weight: 700; transform: translateY(-150%); }
+    .skip-link:focus { transform: translateY(0); }
+
+
+    .site-header { position: sticky; top: 0; z-index: 10; max-width: 1440px; margin: 0 auto; padding: 10px 32px; display: flex; align-items: center; justify-content: space-between; gap: 28px; border-bottom: 1px solid var(--line); background: var(--paper); }
+    .brand { display: inline-flex; align-items: baseline; color: var(--ink); text-decoration: none; font-size: 23px; font-weight: 780; letter-spacing: -.085em; white-space: nowrap; }
+    .brand-dot { color: var(--accent); }
+    .brand-io { color: var(--ink); font-style: italic; font-weight: 500; letter-spacing: -.07em; }
+    .nav { display: flex; align-items: center; gap: 24px; }
+    .nav a { display: inline-flex; align-items: center; min-height: 44px; padding: 0 8px; color: var(--secondary); text-decoration: none; font-size: 13px; font-weight: 570; transition: color .2s var(--ease-standard); }
+    .nav a:hover { color: var(--accent-text); }
+    .nav .nav-cta { min-height: 48px; padding: 0 18px; border: 1px solid var(--line); border-radius: 999px; color: var(--ink); transition: color .2s var(--ease-standard), background .2s var(--ease-standard), border-color .2s var(--ease-standard), transform .1s ease-out; }
+    .nav .nav-cta:hover { border-color: #86868b; background: var(--surface); color: var(--ink); }
+    .nav .nav-cta:active { transform: scale(.98); }
+    .hero { max-width: 1320px; margin: 0 auto; padding: 72px 32px 96px; display: grid; grid-template-columns: 1fr; justify-items: center; gap: 44px; }
+    .hero-copy { width: 100%; text-align: center; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; margin: 0 0 22px; color: var(--muted); font-size: 11px; font-weight: 760; letter-spacing: .15em; text-transform: uppercase; }
+    .eyebrow::before { content: ""; width: 25px; height: 2px; background: var(--line); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { max-width: 1040px; margin: 0 auto 18px; font-size: clamp(42px, 5.2vw, 72px); line-height: 1.02; letter-spacing: -.06em; font-weight: 650; }
+    h1 em { color: var(--ink); font-style: normal; font-weight: 650; }
+    .hero-copy > p { max-width: 680px; margin: 0 auto 24px; color: var(--secondary); font-size: 19px; line-height: 1.55; }
+    .hero-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 12px; }
+    .button { display: inline-flex; align-items: center; justify-content: center; gap: 11px; min-height: 48px; padding: 0 21px; border-radius: 999px; text-decoration: none; font-size: 14px; font-weight: 680; transition: transform .1s ease-out, background .2s var(--ease-standard), color .2s var(--ease-standard); }
+    .button:active { transform: scale(.98); }
+    .button-primary { background: var(--accent); color: #000; box-shadow: 0 6px 16px #e6421a24; }
+    .button-primary:hover { background: #ed5030; }
+    .button-arrow { font-size: 18px; line-height: 1; }
+    .button-text { color: var(--ink); padding-left: 9px; padding-right: 9px; }
+    .hero-tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 0; margin-top: 24px; }
+    .tag { padding: 0; color: var(--muted); font-size: 13px; }
+    .tag + .tag::before { content: "·"; margin: 0 14px; color: var(--muted); }
+    .hero-art { position: relative; width: 100%; min-height: 590px; display: grid; place-items: center; overflow: hidden; border-radius: 24px; background: var(--surface); }
+    .section { padding: 104px 32px; }
+    .section-inner { max-width: 1208px; margin: 0 auto; }
+    .intro { max-width: 680px; margin: 0 auto 48px; text-align: center; }
+    .intro .eyebrow { justify-content: center; }
+    .intro h2, .flow-copy h2, .contact-copy h2 { margin: 0 0 16px; font-size: clamp(39px, 4.4vw, 59px); line-height: 1.06; letter-spacing: -.05em; font-weight: 620; }
+    .intro p, .flow-copy > p, .contact-copy > p { color: var(--secondary); font-size: 16px; line-height: 1.7; }
+    .platform { background: var(--paper); }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card { min-height: 288px; padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--card); }
+    .feature-mark { display: grid; place-items: center; width: 48px; height: 48px; margin-bottom: 32px; border-radius: 16px; background: var(--surface); color: var(--secondary); }
+    .feature-mark svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    .feature-card h3 { margin-bottom: 12px; font-size: 27px; font-weight: 620; letter-spacing: -.035em; }
+    .feature-card p { margin: 0; color: var(--secondary); font-size: 14px; line-height: 1.7; }
+    .flow { background: var(--surface); }
+    .flow-layout { display: grid; grid-template-columns: .9fr 1.1fr; gap: 88px; align-items: start; }
+    .flow-copy { position: static; }
+    .flow-copy .eyebrow { margin-bottom: 20px; }
+    .flow-copy h2 { max-width: 440px; }
+    .flow-copy > p { max-width: 430px; }
+    .steps { display: grid; gap: 0; }
+    .step { display: grid; grid-template-columns: 48px 1fr; gap: 16px; padding: 24px 0; border-top: 1px solid var(--line); }
+    .step-number { color: var(--muted); font-size: 23px; font-style: italic; }
+    .step h3 { margin: 1px 0 8px; font-size: 16px; font-weight: 720; }
+    .step p { max-width: 480px; margin: 0; color: var(--secondary); font-size: 14px; line-height: 1.65; }
+    .manifesto { padding: 96px 32px; background: var(--manifesto-bg); color: white; text-align: center; }
+    .manifesto-inner { max-width: 900px; margin: 0 auto; }
+    .manifesto .eyebrow { color: #a1a1a6; }
+    .manifesto h2 { margin: 0 auto 20px; font-size: clamp(38px, 5vw, 64px); line-height: 1.05; letter-spacing: -.05em; font-weight: 620; }
+    .manifesto h2 em { color: var(--accent); font-style: normal; }
+    .manifesto p { max-width: 550px; margin: 0 auto; color: var(--manifesto-muted); font-size: 15px; line-height: 1.7; }
+    .contact { background: var(--paper); }
+    .contact-layout { display: grid; grid-template-columns: 1fr .78fr; align-items: center; gap: 64px; }
+    .contact-copy h2 { max-width: 600px; }
+    .contact-panel { padding: 32px; border: 1px solid var(--line); border-radius: var(--radius-card); background: var(--card); }
+    .contact-panel small { display: inline-block; margin-bottom: 16px; color: var(--accent-text); font-size: 11px; font-weight: 760; letter-spacing: .1em; text-transform: uppercase; }
+    .contact-panel p { margin: 0; color: var(--secondary); font-size: 15px; line-height: 1.7; }
+    .contact-panel strong { color: var(--ink); }
+    .contact-status { display: inline-flex; align-items: center; min-height: 40px; margin-top: 24px; padding: 0 14px; border-radius: 999px; background: var(--surface); color: var(--secondary); font-size: 13px; font-weight: 650; }
+    footer { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 24px max(32px, calc((100% - 1208px) / 2)); border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    footer .brand { font-size: 19px; }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --paper: #000;
+        --card: #1c1c1e;
+        --ink: #f5f5f7;
+        --muted: #a1a1a6;
+        --secondary: #d2d2d7;
+        --accent-text: #ff8a6b;
+        --surface: #1c1c1e;
+        --line: #38383a;
+        --manifesto-bg: #2c2c2e;
+      }
+    }
+    @media (max-width: 900px) {
+      .site-header { padding: 20px 24px; }
+      .nav { gap: 16px; }
+      .hero { padding: 64px 24px 80px; gap: 36px; }
+      .hero-copy { max-width: 900px; }
+      .hero-art { min-height: 540px; }
+      .flow-layout { grid-template-columns: 1fr; gap: 28px; }
+      .flow-copy { position: static; }
+      .contact-layout { grid-template-columns: 1fr; gap: 28px; }
+    }
+    @media (max-width: 760px) {
+      .feature-grid { grid-template-columns: 1fr; gap: 16px; }
+      .feature-card { min-height: 0; }
+    }
+    @media (max-width: 640px) {
+      html { scroll-padding-top: 112px; }
+
+      .site-header { flex-wrap: wrap; padding: 16px 20px 12px; gap: 8px 12px; }
+      .brand { font-size: 22px; }
+      .nav { width: 100%; flex-wrap: wrap; justify-content: space-between; gap: 4px 8px; }
+      .nav a { min-height: 44px; font-size: 12px; }
+      .nav .nav-cta { min-height: 44px; padding: 0 12px; }
+      .site-header { top: 0; }
+      .hero { padding: 48px 20px 64px; gap: 28px; }
+      .eyebrow { margin-bottom: 16px; font-size: 10px; }
+      h1 { font-size: clamp(40px, 11vw, 56px); }
+      .hero-copy > p { font-size: 16px; }
+      .section { padding: 72px 20px; }
+      .intro { margin-bottom: 32px; text-align: left; }
+      .intro .eyebrow { justify-content: flex-start; }
+      .feature-card { padding: 24px; }
+      .feature-mark { margin-bottom: 24px; }
+      .manifesto { padding: 72px 23px; }
+      footer { align-items: flex-start; flex-direction: column; padding: 20px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+    }
+
+/* Edição Apple: palco escuro, hierarquia serena e controles familiares. */
+:root {
+  color-scheme: light dark;
+  --paper: #fff;
+  --card: #fff;
+  --ink: #1d1d1f;
+  --muted: #6e6e73;
+  --secondary: #515154;
+  --accent: #e85a3f;
+  --accent-text: #b63d28;
+  --surface: #f5f5f7;
+  --line: #d2d2d7;
+  --manifesto-bg: #1d1d1f;
+  --manifesto-muted: #d2d2d7;
+}
+.site-header { max-width: none; padding: 11px max(32px, calc((100% - 1240px) / 2)); background: color-mix(in srgb, var(--paper) 90%, transparent); backdrop-filter: saturate(180%) blur(18px); }
+.nav .nav-cta { border-color: transparent; background: var(--ink); color: var(--paper); }
+.nav .nav-cta:hover { background: var(--secondary); color: var(--paper); }
+.hero { max-width: none; padding: 94px max(32px, calc((100% - 1240px) / 2)) 82px; gap: 48px; background: #09090a; color: #f5f5f7; }
+.hero-copy { max-width: 1060px; }
+.eyebrow { color: #a1a1a6; }
+.eyebrow::before { background: #5a5a60; }
+h1 { max-width: 1050px; font-size: clamp(52px, 7.5vw, 100px); line-height: .96; letter-spacing: -.075em; font-weight: 640; }
+h1 em { color: #f2a18e; font-weight: 600; }
+.hero-copy > p { max-width: 670px; color: #d2d2d7; font-size: clamp(18px, 2vw, 21px); }
+.button-primary { background: var(--accent); color: #fff; box-shadow: none; }
+.button-primary:hover { background: #f06d53; }
+.button-text { color: #f5f5f7; }
+.tag { color: #b8b8bd; }
+.tag + .tag::before { color: #77777c; }
+.hero-art { min-height: 620px; background: radial-gradient(ellipse at 50% 92%, #303036 0, #1b1b20 48%, #121215 100%); border: 1px solid #39393f; border-radius: 32px; }
+.hero-art.system-carousel { min-height: 0; padding: 28px 32px 24px; display: grid; grid-template-columns: minmax(0, 1fr); place-items: stretch; gap: 18px; overflow: hidden; }
+.carousel-stage { min-width: 0; min-height: 420px; display: grid; place-items: center; }
+.carousel-slide { width: 100%; min-height: 420px; margin: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+.carousel-slide[hidden] { display: none; }
+.carousel-slide img { display: block; width: auto; max-width: 100%; max-height: min(68vh, 760px); object-fit: contain; border-radius: 14px; background: #fff; box-shadow: 0 22px 70px #0008; }
+.carousel-slide figcaption { color: #f5f5f7; font-size: 14px; font-weight: 620; letter-spacing: .01em; text-align: center; }
+.carousel-controls { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 16px; }
+.carousel-button { min-width: 120px; min-height: 46px; padding: 0 16px; display: inline-flex; align-items: center; justify-content: center; gap: 9px; border: 1px solid #55555d; border-radius: 999px; background: #212126; color: #f5f5f7; font: inherit; font-size: 13px; font-weight: 650; cursor: pointer; transition: background .2s var(--ease-standard), border-color .2s var(--ease-standard), transform .1s ease-out; }
+.carousel-button:hover { border-color: #888890; background: #303036; }
+.carousel-button:active { transform: scale(.98); }
+.carousel-button:focus-visible, .carousel-indicator:focus-visible { outline: 3px solid #f2a18e; outline-offset: 4px; }
+.carousel-previous { justify-self: start; }
+.carousel-next { justify-self: end; }
+.carousel-status { margin: 0; color: #c7c7cc; font-size: 13px; text-align: center; }
+.carousel-pagination { display: flex; flex-wrap: wrap; justify-content: center; gap: 4px; }
+.carousel-indicator { width: 44px; height: 44px; padding: 0; display: grid; place-items: center; border: 0; border-radius: 50%; background: transparent; cursor: pointer; }
+.carousel-indicator::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #8b8b92; transition: width .2s var(--ease-standard), border-radius .2s var(--ease-standard), background .2s var(--ease-standard); }
+.carousel-indicator[aria-current="true"]::before { width: 24px; border-radius: 999px; background: #f2a18e; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; border: 0; }
+.section { padding-top: 112px; padding-bottom: 112px; }
+.feature-grid { gap: 16px; }
+.feature-card { min-height: 300px; border-radius: 28px; }
+.feature-card h3 { font-size: 26px; }
+.flow { background: var(--surface); }
+.manifesto { padding-top: 108px; padding-bottom: 108px; }
+.contact-panel { border-radius: 28px; box-shadow: 0 18px 55px #1d1d1f0d; }
+@media (prefers-color-scheme: dark) {
+  :root { --paper: #000; --card: #1c1c1e; --ink: #f5f5f7; --muted: #a1a1a6; --secondary: #d2d2d7; --accent-text: #ff8a6b; --surface: #1c1c1e; --line: #38383a; --manifesto-bg: #2c2c2e; --manifesto-muted: #d2d2d7; }
+  .hero { background: #09090a; }
+  .hero-art { background: radial-gradient(ellipse at 50% 92%, #303036 0, #1b1b20 48%, #121215 100%); }
+}
+@media (max-width: 900px) {
+  .site-header { padding: 12px 24px; }
+  .hero { padding: 72px 24px 64px; }
+}
+@media (max-width: 640px) {
+  .site-header { padding: 12px 18px; }
+  .hero { padding: 58px 18px 46px; gap: 30px; }
+  h1 { font-size: clamp(44px, 12vw, 62px); }
+  .hero-art { min-height: 510px; border-radius: 24px; }
+  .hero-art.system-carousel { min-height: 0; padding: 18px 12px 16px; gap: 14px; border-radius: 24px; }
+  .carousel-stage, .carousel-slide { min-height: 0; }
+  .carousel-slide img { max-height: 58vh; }
+  .carousel-controls { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .carousel-status { grid-column: 1 / -1; grid-row: 2; }
+  .carousel-button { min-width: 0; min-height: 44px; padding: 0 12px; }
+  .carousel-indicator { width: 36px; height: 36px; }
+  .section { padding: 76px 18px; }
+  .manifesto { padding: 78px 20px; }
+}</style>
+</head>
+<body>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="site-header">
+    <a class="brand" href="#inicio" aria-label="sabore.io início">sabore<span class="brand-dot">.</span><span class="brand-io">io</span></a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#plataforma">Plataforma</a>
+      <a href="#fluxo">Como funciona</a>
+      <a class="nav-cta" href="#contato">Vamos conversar <span aria-hidden="true">↗</span></a>
+    </nav>
+  </header>
+
+  <main id="conteudo">
+    <section class="hero" id="inicio">
+      <div class="hero-copy">
+        <h1>O sabor da sua marca.<br><em>A tecnologia no ritmo dela.</em></h1>
+        <p>Cardápio, pedidos e operação em uma experiência digital com o jeito do seu restaurante.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#plataforma">Conheça a plataforma <span class="button-arrow" aria-hidden="true">↘</span></a>
+          <a class="button button-text" href="#fluxo">Veja o fluxo</a>
+        </div>
+        <div class="hero-tags" aria-label="Tipos de pedido">
+          <span class="tag">Delivery</span>
+          <span class="tag">Retirada</span>
+          <span class="tag">Balcão e QR</span>
+        </div>
+      </div>
+      <div class="hero-art system-carousel" data-apple-carousel role="region" aria-roledescription="carrossel" aria-label="Telas reais da Machine Espetaria">
+        <div class="carousel-stage">
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 1 de 7: Cliente — página pública">
+            <img src="assets/system-screens/cliente.jpg" alt="Página pública de clientes da Machine Espetaria, com cardápio digital, categorias e itens." fetchpriority="high">
+            <figcaption>Cliente — página pública</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 2 de 7: Pedidos — área administrativa" hidden>
+            <img src="assets/system-screens/pedidos.jpg" alt="Aba Pedidos do painel administrativo da Machine Espetaria, com a lista e o acompanhamento de pedidos." loading="lazy">
+            <figcaption>Pedidos — área administrativa</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 3 de 7: Cardápio — área administrativa" hidden>
+            <img src="assets/system-screens/cardapio.jpg" alt="Aba Cardápio do painel administrativo da Machine Espetaria, com categorias e itens da loja." loading="lazy">
+            <figcaption>Cardápio — área administrativa</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 4 de 7: CRM — área administrativa" hidden>
+            <img src="assets/system-screens/crm.jpg" alt="Aba CRM do painel administrativo da Machine Espetaria, com resumo financeiro e indicadores." loading="lazy">
+            <figcaption>CRM — área administrativa</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 5 de 7: Buffet — área administrativa" hidden>
+            <img src="assets/system-screens/buffet.jpg" alt="Aba Buffet do painel administrativo da Machine Espetaria, com opções de perfil e configuração." loading="lazy">
+            <figcaption>Buffet — área administrativa</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 6 de 7: WhatsApp — área administrativa" hidden>
+            <img src="assets/system-screens/whatsapp.jpg" alt="Aba WhatsApp do painel administrativo da Machine Espetaria, com estado da conexão e opções de mensagens." loading="lazy">
+            <figcaption>WhatsApp — área administrativa</figcaption>
+          </figure>
+          <figure class="carousel-slide" data-carousel-slide role="group" aria-roledescription="slide" aria-label="Tela 7 de 7: Configurações — área administrativa" hidden>
+            <img src="assets/system-screens/configuracoes.jpg" alt="Aba Configurações do painel administrativo da Machine Espetaria, com opções da loja e horários." loading="lazy">
+            <figcaption>Configurações — área administrativa</figcaption>
+          </figure>
+        </div>
+        <div class="carousel-controls">
+          <button class="carousel-button carousel-previous" type="button" data-carousel-previous aria-label="Tela anterior"><span aria-hidden="true">←</span> Anterior</button>
+          <p class="carousel-status" data-carousel-status aria-live="polite" aria-atomic="true">Tela 1 de 7: Cliente — página pública</p>
+          <button class="carousel-button carousel-next" type="button" data-carousel-next aria-label="Próxima tela">Próxima <span aria-hidden="true">→</span></button>
+        </div>
+        <div class="carousel-pagination" role="group" aria-label="Selecionar uma tela do sistema">
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 1 de 7: Cliente — página pública" aria-current="true"><span class="visually-hidden">Cliente — página pública</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 2 de 7: Pedidos — área administrativa"><span class="visually-hidden">Pedidos — área administrativa</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 3 de 7: Cardápio — área administrativa"><span class="visually-hidden">Cardápio — área administrativa</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 4 de 7: CRM — área administrativa"><span class="visually-hidden">CRM — área administrativa</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 5 de 7: Buffet — área administrativa"><span class="visually-hidden">Buffet — área administrativa</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 6 de 7: WhatsApp — área administrativa"><span class="visually-hidden">WhatsApp — área administrativa</span></button>
+          <button class="carousel-indicator" type="button" data-carousel-indicator aria-label="Mostrar tela 7 de 7: Configurações — área administrativa"><span class="visually-hidden">Configurações — área administrativa</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="section platform" id="plataforma" aria-labelledby="platform-title">
+      <div class="section-inner">
+        <div class="intro">
+          <p class="eyebrow">Tecnologia com propósito</p>
+          <h2 id="platform-title">Do cardápio à operação, tudo em sintonia.</h2>
+          <p>Uma experiência mais clara para quem pede e mais organizada para quem prepara.</p>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <div class="feature-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"></circle><circle cx="12" cy="12" r="4.5"></circle></svg></div>
+            <h3>Cardápio com a sua cara</h3>
+            <p>Apresente categorias, destaque itens e permita que cada pessoa personalize o pedido antes de adicionar ao carrinho.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12h13"></path><path d="m12 6 6 6-6 6"></path></svg></div>
+            <h3>Pedidos com contexto</h3>
+            <p>Receba pedidos para entrega ou retirada, acompanhe o andamento e organize também o atendimento via Tablet ou Código QR.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"></rect><path d="M4 10h16M10 10v10"></path><path d="M7 7h.01M10 7h.01"></path></svg></div>
+            <h3>Operação em sintonia</h3>
+            <p>Reúna pedidos, visão de clientes e configurações do WhatsApp em um painel pensado para a rotina da loja.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section flow" id="fluxo" aria-labelledby="flow-title">
+      <div class="section-inner flow-layout">
+        <div class="flow-copy">
+          <p class="eyebrow">Da vontade ao próximo pedido</p>
+          <h2 id="flow-title">Menos passos soltos. Mais cuidado em cada etapa.</h2>
+          <p>Cada etapa facilita a escolha do cliente e ajuda a equipe a acompanhar o pedido até a entrega.</p>
+        </div>
+        <div class="steps">
+          <article class="step">
+            <span class="step-number">01</span>
+            <div><h3>O cliente encontra o cardápio</h3><p>Uma vitrine digital adaptada ao celular, com categorias, itens e opções de personalização.</p></div>
+          </article>
+          <article class="step">
+            <span class="step-number">02</span>
+            <div><h3>O pedido chega estruturado</h3><p>Entrega, retirada e itens escolhidos seguem juntos para o checkout e para a operação.</p></div>
+          </article>
+          <article class="step">
+            <span class="step-number">03</span>
+            <div><h3>A equipe acompanha o andamento</h3><p>O painel reúne pedidos, status e ferramentas de apoio como impressão e CRM.</p></div>
+          </article>
+          <article class="step">
+            <span class="step-number">04</span>
+            <div><h3>A conversa pode continuar</h3><p>Quando habilitada na loja, a integração com WhatsApp apoia as mensagens ligadas ao pedido.</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="manifesto">
+      <div class="manifesto-inner">
+        <p class="eyebrow">sabore.io</p>
+        <h2>Tecnologia boa acompanha o ritmo.<br><em>O sabor continua sendo seu.</em></h2>
+        <p>Do cardápio à operação, a tecnologia trabalha nos bastidores para que a experiência continue com a identidade da casa.</p>
+      </div>
+    </section>
+
+    <section class="section contact" id="contato" aria-labelledby="contact-title">
+      <div class="section-inner contact-layout">
+        <div class="contact-copy">
+          <p class="eyebrow">Próxima conversa</p>
+          <h2 id="contact-title">Seu restaurante tem um jeito próprio de servir.</h2>
+          <p>Vamos apresentar a tecnologia a partir da sua operação — cardápio, pedidos e rotina da equipe.</p>
+        </div>
+        <aside class="contact-panel">
+
+          <p><strong>Canal comercial em definição.</strong><br>O formulário e os contatos serão conectados quando validarmos o WhatsApp ou e-mail oficial da Saboreio.</p>
+          <span class="contact-status">Contato em validação</span>
+        </aside>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <a class="brand" href="#inicio" aria-label="sabore.io início">sabore<span class="brand-dot">.</span><span class="brand-io">io</span></a>
+
+  </footer>
+  <script>
+    (() => {
+      const carousel = document.querySelector("[data-apple-carousel]");
+      if (!carousel) return;
+
+      const slides = Array.from(carousel.querySelectorAll("[data-carousel-slide]"));
+      const indicators = Array.from(carousel.querySelectorAll("[data-carousel-indicator]"));
+      const previousButton = carousel.querySelector("[data-carousel-previous]");
+      const nextButton = carousel.querySelector("[data-carousel-next]");
+      const status = carousel.querySelector("[data-carousel-status]");
+      if (slides.length !== 7 || indicators.length !== slides.length || !previousButton || !nextButton || !status) return;
+
+      let activeIndex = 0;
+
+      function showSlide(index) {
+        activeIndex = (index + slides.length) % slides.length;
+        slides.forEach((slide, slideIndex) => {
+          slide.hidden = slideIndex !== activeIndex;
+        });
+        indicators.forEach((indicator, indicatorIndex) => {
+          if (indicatorIndex === activeIndex) indicator.setAttribute("aria-current", "true");
+          else indicator.removeAttribute("aria-current");
+        });
+        const caption = slides[activeIndex].querySelector("figcaption").textContent.trim();
+        status.textContent = `Tela ${activeIndex + 1} de ${slides.length}: ${caption}`;
+      }
+
+      previousButton.addEventListener("click", () => showSlide(activeIndex - 1));
+      nextButton.addEventListener("click", () => showSlide(activeIndex + 1));
+      indicators.forEach((indicator, index) => {
+        indicator.addEventListener("click", () => showSlide(index));
+      });
+      showSlide(activeIndex);
+    })();
+  </script>
+</body>
+</html>

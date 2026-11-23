@@ -1,0 +1,12 @@
+# Personal HomeMethod installation and generated workflow state
+/.agents/
+/_bmad/
+/_bmad-output/
+
+# Unselected local design references and research
+/index.html
+/moderno.html
+/ESCOPO.md
+
+# Local Vercel link metadata
+/.vercel/
